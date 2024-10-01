@@ -7,26 +7,67 @@ body {
     padding: 0;
 }
 
-/* Navbar styling */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area will expand to fill the available space */
+.main-content {
+    flex: 1;
+    padding: 20px; /* Optional padding for content */
+}
+
+/* Navbar custom styles */
 .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e1e8ed;
+    background-color: #f8f9fa !important; /* Light background for navbar */
+    padding: 15px 0; /* Increase padding for better spacing */
+    border-bottom: 1px solid #e1e8ed; /* Soft border at the bottom */
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Larger font size for brand name */
     font-weight: bold;
-    color: #1da1f2;
+    color: #007bff !important; /* Primary blue for branding */
 }
 
-.navbar-nav .nav-link {
-    color: #1da1f2;
-    font-size: 1rem;
-    padding-right: 20px;
+.navbar-toggler {
+    border: none; /* Remove default border for burger icon */
 }
 
-.navbar-nav .nav-link:hover {
-    color: #0d95e8;
+.navbar-toggler-icon {
+    background-color: #007bff; /* Blue color for burger icon */
+}
+
+.nav-item {
+    margin-right: 15px; /* Space between nav items */
+}
+
+.nav-link {
+    font-size: 1rem; /* Increase font size */
+    color: #343a40 !important; /* Dark text for all nav links */
+}
+
+.nav-link:hover {
+    color: #007bff !important; /* Change link color on hover */
+}
+
+.nav-link.text-danger {
+    color: #dc3545 !important; /* Red for log out link */
+}
+
+.navbar .nav-link.font-weight-bold {
+    color: #007bff !important; /* Bold and blue for profile name */
+}
+
+/* Make the navbar sticky at the top */
+.navbar.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 /* Body styling */
@@ -124,11 +165,12 @@ a:hover {
     padding: 20px;
     background-color: #f7f9fa;
     border-top: 1px solid #e1e8ed;
-    margin-top: 40px;
     font-family: 'Arial', sans-serif;
     color: #657786;
     position: relative;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: auto;
 }
 
 .footer a {
@@ -269,4 +311,53 @@ a:hover {
 
 .btn-unfollow {
     background-color: #ff6347;
+}
+
+.heart-animation {
+    position: absolute;
+    color: #e0245e;
+    font-size: 2.5rem;
+    animation: float 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 100000;  /* Ensure it stays on top */
+}
+
+@keyframes float {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);  /* Move upwards */
+    }
+}
+
+.like-btn {
+    margin-right: 18rem;
+}
+
+/* For very small screens, like small phones */
+@media (max-width: 615px) {
+    .like-btn {
+        margin-right: 15rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 576px) {
+    .like-btn {
+        margin-right: 13rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 576px) {
+    .like-btn {
+        margin-right: 10rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 480px) {
+    .like-btn {
+        margin-right: 7rem;  /* Further adjust for smaller devices */
+    }
 }

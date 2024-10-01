@@ -168,3 +168,13 @@ def toggle_like(request, post_id):
         liked = True
 
     return JsonResponse({"likes_count": post.likes.count(), "liked": liked})
+
+def delete_post(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=post_id)
+        if post.user == request.user:
+            post.delete()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

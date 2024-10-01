@@ -3,10 +3,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Social Network{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
-         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+         
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -55,82 +57,150 @@
             });
         });
         
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.like-btn').forEach(button => {
-                button.onclick = function() {
-                    const postId = this.dataset.postId;
-                    const url = `/toggle_like/${postId}/`;
-        
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.onclick = function() {
+                const postId = this.dataset.postId;
+                const url = `/toggle_like/${postId}/`;
+    
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                    } else {
+                        // Update button text and likes count
+                        document.querySelector(`#post-${postId} .like-btn`).innerHTML = data.liked ? 'Dislike' : 'Like';
+                        document.querySelector(`#post-${postId} .likes-count`).innerHTML = `Likes: ${data.likes_count}`;
+    
+                        // If the post is liked, show the heart animation
+                        if (data.liked) {
+                            showHeartAnimation(this);
                         }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            console.error(data.error);
-                        } else {
-                            document.querySelector(`#post-${postId} .like-btn`).innerHTML = data.liked ? 'Dislike' : 'Like';
-                            document.querySelector(`#post-${postId} .likes-count`).innerHTML = `Likes: ${data.likes_count}`;
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                }
-            });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
         });
+    });
+
+    // Function to show heart animation
+    function showHeartAnimation(button) {
+        // Create the heart element
+        const heart = document.createElement('span');
+        heart.innerHTML = '❤️';
+        heart.classList.add('heart-animation');
+    
+        // Append the heart element to the body
+        document.body.appendChild(heart);
+    
+        // Get the button's position relative to the viewport and scroll position
+        const rect = button.getBoundingClientRect();
+        let heartTop = rect.top + window.scrollY;  // Add scrollY to account for scrolling
+
+        // Prevent the heart from starting off the page at the bottom
+        if (rect.top + rect.height / 2 > window.innerHeight - 100) {
+            heartTop = window.scrollY + window.innerHeight - 100;  // Adjust top if near bottom
+        }
+
+        // Set heart position relative to the button
+        heart.style.left = `${rect.left + rect.width / 2}px`;
+        heart.style.top = `${heartTop}px`;
+
+        // Remove the heart after the animation completes
+        setTimeout(() => {
+            heart.remove();
+        }, 2000);  // Adjust this time for the length of the animation
+    }   
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.onclick = function() {
+            const postId = this.dataset.postId;
+            const url = `/delete_post/${postId}/`;
+            console.log("test");
+       {% comment %} fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                document.querySelector(`#post-${postId}`).remove();
+            } else if (data.error) {
+                console.error(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        {% endcomment %}
+        };
+        
+    });
+});
+
+
     </script>
     </head>
     <body>
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
-          
-            <div>
-              <ul class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
-              
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                       <a class="nav-link" href="{% url 'following' %}" >Following</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'new_post' %}">New Post</a>
-                    </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link" href="#">Following</a>#}
-{#                    </li>#}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                {% endif %}
-              </ul>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div class="main-content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+                <div class="container">
+                    <a class="navbar-brand font-weight-bold text-primary" href="#">Our Social Network</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ml-auto">
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold text-primary" href="{% url 'profile' user.username %}">{{ user.username }}</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="{% url 'index' %}">All Posts</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="{% url 'following' %}">Following</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="{% url 'new_post' %}">New Post</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" href="{% url 'logout' %}">Log Out</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="{% url 'login' %}">Log In</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="{% url 'register' %}">Register</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="body">
+                {% block body %}
+                {% endblock %}
             </div>
-          </nav>
-        
-        <div class="body">
-            {% block body %}
-            {% endblock %}
+            
         </div>
-        
-        
-        <footer class="footer" >
+        <footer class="footer">
             Made with <span class="heart">❤️</span> by <a href="#">Grancea Alexandru</a>.
         </footer>
     </body>
