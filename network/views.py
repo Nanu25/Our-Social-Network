@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 import  json
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_POST
 
@@ -178,3 +178,13 @@ def delete_post(request, post_id):
         else:
             return JsonResponse({'error': 'Unauthorized'}, status=403)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        try:
+            user = User.objects.get(username__iexact=query)
+            return redirect(reverse('profile', kwargs={'username': user.username}))
+        except User.DoesNotExist:
+            return render(request, 'network/search_results.html')

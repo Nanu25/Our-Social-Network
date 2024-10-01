@@ -8,7 +8,8 @@
         <title>{% block title %}Social Network{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
-         
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -56,7 +57,7 @@
                 };
             });
         });
-        
+
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.like-btn').forEach(button => {
             button.onclick = function() {
@@ -124,7 +125,7 @@
             const postId = this.dataset.postId;
             const url = `/delete_post/${postId}/`;
             console.log("test");
-       {% comment %} fetch(url, {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
@@ -144,12 +145,11 @@
             }
         })
         .catch(error => console.error('Error:', error));
-        {% endcomment %}
+
         };
         
     });
 });
-
 
     </script>
     </head>
@@ -158,31 +158,49 @@
         <div class="main-content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
                 <div class="container">
-                    <a class="navbar-brand font-weight-bold text-primary" href="#">Our Social Network</a>
+                    <a class="navbar-brand font-weight-bold text-primary" href="{% url 'index' %}">Our Social Network</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ml-auto">
+
+{% if user.is_authenticated %}
+    <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
+        <div class="input-group">
+            <input class="form-control" type="search" name="q" placeholder="Search..." aria-label="Search" style="border-radius: 25px; padding: 10px;">
+            <div class="input-group-append" style="position: relative;">
+                <span class="input-group-text" style="background-color: transparent; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
+
                             {% if user.is_authenticated %}
                                 <li class="nav-item">
                                     <a class="nav-link font-weight-bold text-primary" href="{% url 'profile' user.username %}">{{ user.username }}</a>
                                 </li>
                             {% endif %}
+
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="{% url 'index' %}">All Posts</a>
                             </li>
-                            {% if user.is_authenticated %}
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="{% url 'following' %}">Following</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="{% url 'new_post' %}">New Post</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-danger" href="{% url 'logout' %}">Log Out</a>
-                                </li>
-                            {% else %}
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" href="{% url 'following' %}">Following</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" href="{% url 'new_post' %}">New Post</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-danger" href="{% url 'logout' %}">Log Out</a>
+                                    </li>
+                                {% else %}
+
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="{% url 'login' %}">Log In</a>
                                 </li>

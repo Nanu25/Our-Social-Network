@@ -16,4 +16,5 @@ urlpatterns = [
     path("edit_post/<int:post_id>/", views.edit_post, name="edit_post"),
     path("toggle_like/<int:post_id>/", views.toggle_like, name="toggle_like"),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
+    path('search', views.search, name='search'),
 ]
