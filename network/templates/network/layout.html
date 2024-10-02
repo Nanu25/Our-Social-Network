@@ -12,177 +12,238 @@
 
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.edit-btn').forEach(button => {
+        document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.onclick = function() {
+                        const postId = this.dataset.postId;
+                        const postDiv = document.getElementById(`post-${postId}`);
+                        const postContent = postDiv.querySelector('.post-content');
+
+                        const textarea = document.createElement('textarea');
+                        textarea.className = 'form-control';
+                        textarea.value = postContent.innerHTML.trim();
+
+                        const saveButton = document.createElement('button');
+                        saveButton.className = 'btn btn-sm btn-success';
+                        saveButton.innerText = 'Save';
+
+                        postContent.style.display = 'none';
+                        postDiv.appendChild(textarea);
+                        postDiv.appendChild(saveButton);
+
+                        saveButton.onclick = function() {
+                            fetch(`/edit_post/${postId}/`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                },
+                                body: JSON.stringify({
+                                    content: textarea.value
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.success) {
+                                    postContent.innerHTML = result.content;
+                                } else {
+                                    alert(result.error);
+                                }
+                                textarea.remove();
+                                saveButton.remove();
+                                postContent.style.display = 'block';
+                            });
+                        };
+                    };
+                });
+            });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.like-btn').forEach(button => {
                 button.onclick = function() {
                     const postId = this.dataset.postId;
-                    const postDiv = document.getElementById(`post-${postId}`);
-                    const postContent = postDiv.querySelector('.post-content');
-                    
-                    const textarea = document.createElement('textarea');
-                    textarea.className = 'form-control';
-                    textarea.value = postContent.innerHTML.trim();
-                    
-                    const saveButton = document.createElement('button');
-                    saveButton.className = 'btn btn-sm btn-success';
-                    saveButton.innerText = 'Save';
-        
-                    postContent.style.display = 'none';
-                    postDiv.appendChild(textarea);
-                    postDiv.appendChild(saveButton);
-        
-                    saveButton.onclick = function() {
-                        fetch(`/edit_post/${postId}/`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': '{{ csrf_token }}'  
-                            },
-                            body: JSON.stringify({
-                                content: textarea.value
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                postContent.innerHTML = result.content;
-                            } else {
-                                alert(result.error);
+                    const url = `/toggle_like/${postId}/`;
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error(data.error);
+                        } else {
+                            // Update button text and likes count
+                            document.querySelector(`#post-${postId} .like-btn`).innerHTML = data.liked ? 'Dislike' : 'Like';
+                            document.querySelector(`#post-${postId} .likes-count`).innerHTML = `Likes: ${data.likes_count}`;
+
+                            // If the post is liked, show the heart animation
+                            if (data.liked) {
+                                showHeartAnimation(this);
                             }
-                            textarea.remove();
-                            saveButton.remove();
-                            postContent.style.display = 'block';
-                        });
-                    };
-                };
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
             });
         });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.like-btn').forEach(button => {
-            button.onclick = function() {
-                const postId = this.dataset.postId;
-                const url = `/toggle_like/${postId}/`;
-    
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        // Update button text and likes count
-                        document.querySelector(`#post-${postId} .like-btn`).innerHTML = data.liked ? 'Dislike' : 'Like';
-                        document.querySelector(`#post-${postId} .likes-count`).innerHTML = `Likes: ${data.likes_count}`;
-    
-                        // If the post is liked, show the heart animation
-                        if (data.liked) {
-                            showHeartAnimation(this);
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+        // Function to show heart animation
+        function showHeartAnimation(button) {
+            // Create the heart element
+            const heart = document.createElement('span');
+            heart.innerHTML = '❤️';
+            heart.classList.add('heart-animation');
+
+            // Append the heart element to the body
+            document.body.appendChild(heart);
+
+            // Get the button's position relative to the viewport and scroll position
+            const rect = button.getBoundingClientRect();
+            let heartTop = rect.top + window.scrollY;  // Add scrollY to account for scrolling
+
+            // Prevent the heart from starting off the page at the bottom
+            if (rect.top + rect.height / 2 > window.innerHeight - 100) {
+                heartTop = window.scrollY + window.innerHeight - 100;  // Adjust top if near bottom
             }
-        });
-    });
 
-    // Function to show heart animation
-    function showHeartAnimation(button) {
-        // Create the heart element
-        const heart = document.createElement('span');
-        heart.innerHTML = '❤️';
-        heart.classList.add('heart-animation');
-    
-        // Append the heart element to the body
-        document.body.appendChild(heart);
-    
-        // Get the button's position relative to the viewport and scroll position
-        const rect = button.getBoundingClientRect();
-        let heartTop = rect.top + window.scrollY;  // Add scrollY to account for scrolling
+            // Set heart position relative to the button
+            heart.style.left = `${rect.left + rect.width / 2}px`;
+            heart.style.top = `${heartTop}px`;
 
-        // Prevent the heart from starting off the page at the bottom
-        if (rect.top + rect.height / 2 > window.innerHeight - 100) {
-            heartTop = window.scrollY + window.innerHeight - 100;  // Adjust top if near bottom
+            // Remove the heart after the animation completes
+            setTimeout(() => {
+                heart.remove();
+            }, 2000);  // Adjust this time for the length of the animation
         }
 
-        // Set heart position relative to the button
-        heart.style.left = `${rect.left + rect.width / 2}px`;
-        heart.style.top = `${heartTop}px`;
-
-        // Remove the heart after the animation completes
-        setTimeout(() => {
-            heart.remove();
-        }, 2000);  // Adjust this time for the length of the animation
-    }   
-
-    document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.onclick = function() {
-            const postId = this.dataset.postId;
-            const url = `/delete_post/${postId}/`;
-            console.log("test");
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Server error: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                document.querySelector(`#post-${postId}`).remove();
-            } else if (data.error) {
-                console.error(data.error);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-
-        };
-        
-    });
-    });
-    
- document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.delete-comment-btn').forEach(button => {
-        button.onclick = function() {
-            const commentId = this.dataset.commentId;
-            const url = `/delete_comment/${commentId}/`; // URL to handle comment deletion
-
+        document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.onclick = function() {
+                const postId = this.dataset.postId;
+                const url = `/delete_post/${postId}/`;
+                console.log("test");
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    // Use the comment ID to locate the correct comment div
-                    const commentElement = document.getElementById(`comment-${commentId}`);
-                    if (commentElement) {
-                        commentElement.remove(); // Remove the comment element from the DOM
-                    } else {
-                        console.error('Comment element not found for deletion.');
-                    }
+                    document.querySelector(`#post-${postId}`).remove();
                 } else if (data.error) {
                     console.error(data.error);
                 }
             })
             .catch(error => console.error('Error:', error));
-        }
-    });
-});
 
-    
+            };
+
+        });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-comment-btn').forEach(button => {
+                button.onclick = function() {
+                    const commentId = this.dataset.commentId;
+                    const url = `/delete_comment/${commentId}/`; // URL to handle comment deletion
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Use the comment ID to locate the correct comment div
+                            const commentElement = document.getElementById(`comment-${commentId}`);
+                            if (commentElement) {
+                                commentElement.remove(); // Remove the comment element from the DOM
+                            } else {
+                                console.error('Comment element not found for deletion.');
+                            }
+                        } else if (data.error) {
+                            console.error(data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+
+{% comment %}
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('#comment-form').onsubmit = function(e) {
+        e.preventDefault(); // Prevent form from submitting the traditional way
+
+        const postId = this.dataset.postId; // Get post ID
+        const url = `/add_comment/${postId}/`; // URL to post comment to
+        const content = this.querySelector('textarea[name="content"]').value; // Get comment content
+
+        if (content.trim() === "") {
+            alert("Comment cannot be empty!");
+            return;
+        }
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                content: content,
+            }),
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                alert(data.error); // Display error message to user
+            } else {
+                // Create a new comment element
+                const newComment = document.createElement('div');
+                newComment.className = 'comment';
+                newComment.id = `comment-${data.id}`; // Give it an ID if needed for deletion
+                newComment.innerHTML = `
+                    <strong>${data.user}</strong>
+                    <p>${data.content}</p>
+                    <small>${data.timestamp}</small>
+                    <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="${data.id}">
+                        Delete
+                    </button>
+                `;
+
+                // Append the new comment to the comments section
+                document.querySelector('.comments-section').append(newComment);
+
+                // Optionally, reset the comment form
+                document.querySelector('textarea[name="content"]').value = '';
+
+                // Attach delete event listener to the new comment delete button
+                attachDeleteCommentEvent(newComment.querySelector('.delete-comment-btn'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("There was an error adding the comment.");
+        });
+    };
+});
+{% endcomment %}
+
+
     </script>
     </head>
     <body>
