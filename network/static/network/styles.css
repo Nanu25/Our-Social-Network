@@ -31,6 +31,7 @@ html, body {
     font-size: 1.5rem; /* Larger font size for brand name */
     font-weight: bold;
     color: #007bff !important; /* Primary blue for branding */
+    margin-left: -10px; /* Adjust this value as needed */
 }
 
 .navbar-toggler {
@@ -264,6 +265,12 @@ a:hover {
 .btn-outline-primary:hover {
     background-color: #1da1f2;
     color: white;
+}
+
+/* Increase the width of the search bar */
+.form-control {
+    width: 300px;  /* Adjust this value as needed */
+    padding: 10px; /* You can also increase the padding for a larger feel */
 }
 
 /* Container for the profile */

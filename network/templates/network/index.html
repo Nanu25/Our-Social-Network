@@ -19,6 +19,33 @@
                     <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Like</button>
                 {% endif %}
                  
+                 <div class="comments-section">
+                    <h6>Comments</h6>
+                    {% for comment in post.post_comments.all %}
+                          <div class="comment" id="comment-{{ comment.id }}">
+                            <strong>{{ comment.user.username }}</strong>
+                            <p>{{ comment.content }}</p>
+                            <small>{{ comment.timestamp|date:"b d Y, h:i A" }}</small>
+                        
+                            {% if comment.user == request.user %}
+                                <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="{{ comment.id }}">
+                                    Delete
+                                </button>
+                            {% endif %}
+                          </div>
+                        
+                    {% empty %}
+                        <p>No comments yet. Be the first to comment!</p>
+                    {% endfor %}
+                 
+                 <form id="comment-form" method="POST" action="{% url 'add_comment' post.id %}">
+                    {% csrf_token %}
+                    <textarea name="content" placeholder="Add your comment..." required></textarea>
+                    <button type="submit">Comment</button>
+                </form>
+                 
+                </div>
+                 
             {% endif %}
         </div>
         <hr>

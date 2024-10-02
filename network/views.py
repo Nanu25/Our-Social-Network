@@ -10,7 +10,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_POST
 
-from .models import User, Post
+from .models import User, Post, Comment
+
 
 def index(request):
     posts = Post.objects.all().order_by('-timestamp')
@@ -188,3 +189,29 @@ def search(request):
             return redirect(reverse('profile', kwargs={'username': user.username}))
         except User.DoesNotExist:
             return render(request, 'network/search_results.html')
+
+
+def add_comment(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=post_id)
+        content = request.POST.get('content')
+
+        # Create the comment
+        comment = Comment.objects.create(post=post, user=request.user, content=content)
+
+        # Redirect to the specific post page (if you have a post detail view)
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+@require_POST
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Ensure the logged-in user is the author of the comment
+    if request.user == comment.user:
+        comment.delete()
+        return JsonResponse({"success": True})
+    else:
+        return JsonResponse({"error": "You are not authorized to delete this comment."}, status=403)
