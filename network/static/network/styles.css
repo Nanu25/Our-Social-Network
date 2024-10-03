@@ -392,3 +392,73 @@ textarea {
 #comment-form button {
     border-radius: 0 8px 8px 0;
 }
+
+
+.suggested-users {
+    position: fixed; /* Fixed on the left side */
+    top: 100px; /* Add some space from the top */
+    left: 20px; /* Fixed distance from the left side */
+    width: 200px; /* Adjust width as needed, not too wide */
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+}
+
+.suggested-users {
+    position: fixed;
+    top: 150px; /* Move it down a little more */
+    left: 20px;
+    width: 220px; /* Slightly increase the width for better readability */
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    transition: transform 0.3s ease-in-out; /* Animation for smooth appearance */
+}
+
+.suggested-users:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add more shadow on hover */
+}
+
+.suggested-users h5 {
+    font-size: 1.1rem; /* Make the heading a bit larger */
+    font-weight: bold;
+    color: #007bff; /* Use a blue shade for the heading */
+}
+
+.suggested-users ul {
+    list-style: none; /* Remove bullet points */
+    padding-left: 0;
+}
+
+.suggested-users li {
+    margin-bottom: 10px; /* Add space between suggested users */
+    animation: fadeIn 0.5s ease-in-out; /* Animation for each user */
+}
+
+.suggested-users li a {
+    text-decoration: none;
+    color: #343a40; /* Dark text color */
+    font-weight: bold;
+    transition: color 0.3s ease-in-out; /* Smooth color change */
+}
+
+.suggested-users li a:hover {
+    color: #007bff; /* Change to blue on hover */
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

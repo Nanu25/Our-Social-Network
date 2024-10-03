@@ -9,9 +9,6 @@
             <p class="post-content">{{ post.content }}</p>
             <p><small>{{ post.timestamp|date:"b d Y, h:i A" }}</small></p>
             <p class="likes-count">Likes: {{ post.likes.count }}</p>
-{#            {% if post.user == request.user %}#}
-{#                <button class="btn btn-sm btn-outline-primary edit-btn" data-post-id="{{ post.id }}">Edit</button>#}
-{#            {% endif %}#}
              {% if user.is_authenticated %}
                 {% if request.user in post.likes.all %}
                     <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Dislike</button>

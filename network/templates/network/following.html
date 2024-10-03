@@ -2,27 +2,71 @@
 
 {% block body %}
 
-    <h2>Following</h2>
+{#    <h2>Following</h2>#}
+    {% if user.following.all %}
 
-    {% for post in page_obj %}
-        <div class="post" id="post-{{ post.id }}">
-            <a href="{% url 'profile' post.user.username %}">{{ post.user }}</a>
-            <p class="post-content">{{ post.content }}</p>
-            <p><small>{{ post.timestamp|date:"b d Y, h:i A" }}</small></p>
-            <p class="likes-count">Likes: {{ post.likes.count }}</p>
-            {% if post.user == request.user %}
-                <button class="btn btn-sm btn-outline-primary edit-btn" data-post-id="{{ post.id }}">Edit</button>
-            {% endif %}
-             {% if user.is_authenticated %}
-                {% if request.user in post.likes.all %}
-                    <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Dislike</button>
-                {% else %}
-                    <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Like</button>
+        {% for post in page_obj %}
+            <div class="post" id="post-{{ post.id }}">
+                <a href="{% url 'profile' post.user.username %}">{{ post.user }}</a>
+                <p class="post-content">{{ post.content }}</p>
+                <p><small>{{ post.timestamp|date:"b d Y, h:i A" }}</small></p>
+                <p class="likes-count">Likes: {{ post.likes.count }}</p>
+                
+                {% if post.user == request.user %}
+                    <button class="btn btn-sm btn-outline-primary edit-btn" data-post-id="{{ post.id }}">Edit</button>
                 {% endif %}
-            {% endif %}
-        </div>
-        <hr>
-    {% endfor %}
+                
+                {% if user.is_authenticated %}
+                    {% if request.user in post.likes.all %}
+                        <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Dislike</button>
+                    {% else %}
+                        <button class="btn btn-sm btn-outline-primary like-btn" data-post-id="{{ post.id }}">Like</button>
+                    {% endif %}
+                    
+                    <!-- Comments section -->
+                    <div class="comments-section mt-4">
+                        <h5 class="mb-3">Comments</h5>
+                        
+                        <div class="comments-list">
+                            {% for comment in post.post_comments.all %}
+                                <div class="card mb-3" id="comment-{{ comment.id }}">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>{{ comment.user.username }}</strong> <br>
+                                                <small>{{ comment.timestamp|date:"b d Y, h:i A" }}</small>
+                                            </div>
+                                            {% if comment.user == request.user %}
+                                                <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="{{ comment.id }}">Delete</button>
+                                            {% endif %}
+                                        </div>
+                                        <p class="mt-2 mb-0">{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">No comments yet. Be the first to comment!</p>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Comment form -->
+                        <form id="comment-form" method="POST" action="{% url 'add_comment' post.id %}" class="mt-4">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <textarea class="form-control" name="content" placeholder="Add your comment..." rows="2" required></textarea>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">You are not following anyone yet. Follow users to see their posts here!</p>
+    {% endif %}
+
 
     <!-- Pagination Controls -->
     <nav aria-label="Page navigation">

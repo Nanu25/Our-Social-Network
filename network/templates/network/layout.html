@@ -153,95 +153,96 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.delete-comment-btn').forEach(button => {
-                button.onclick = function() {
-                    const commentId = this.dataset.commentId;
-                    const url = `/delete_comment/${commentId}/`; // URL to handle comment deletion
+                    button.onclick = function() {
+                        const commentId = this.dataset.commentId;
+                        const url = `/delete_comment/${commentId}/`; // URL to handle comment deletion
 
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Use the comment ID to locate the correct comment div
-                            const commentElement = document.getElementById(`comment-${commentId}`);
-                            if (commentElement) {
-                                commentElement.remove(); // Remove the comment element from the DOM
-                            } else {
-                                console.error('Comment element not found for deletion.');
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                             }
-                        } else if (data.error) {
-                            console.error(data.error);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Use the comment ID to locate the correct comment div
+                                const commentElement = document.getElementById(`comment-${commentId}`);
+                                if (commentElement) {
+                                    commentElement.remove(); // Remove the comment element from the DOM
+                                } else {
+                                    console.error('Comment element not found for deletion.');
+                                }
+                            } else if (data.error) {
+                                console.error(data.error);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                });
             });
-        });
+
 
 {% comment %}
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('#comment-form').onsubmit = function(e) {
-        e.preventDefault(); // Prevent form from submitting the traditional way
+       document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('#comment-form').onsubmit = function(e) {
+            e.preventDefault(); // Prevent form from submitting the traditional way
 
-        const postId = this.dataset.postId; // Get post ID
-        const url = `/add_comment/${postId}/`; // URL to post comment to
-        const content = this.querySelector('textarea[name="content"]').value; // Get comment content
+            const postId = this.dataset.postId; // Get post ID
+            const url = `/add_comment/${postId}/`; // URL to post comment to
+            const content = this.querySelector('textarea[name="content"]').value; // Get comment content
 
-        if (content.trim() === "") {
-            alert("Comment cannot be empty!");
-            return;
-        }
-
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                content: content,
-            }),
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json'
+            if (content.trim() === "") {
+                alert("Comment cannot be empty!");
+                return;
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error(data.error);
-                alert(data.error); // Display error message to user
-            } else {
-                // Create a new comment element
-                const newComment = document.createElement('div');
-                newComment.className = 'comment';
-                newComment.id = `comment-${data.id}`; // Give it an ID if needed for deletion
-                newComment.innerHTML = `
-                    <strong>${data.user}</strong>
-                    <p>${data.content}</p>
-                    <small>${data.timestamp}</small>
-                    <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="${data.id}">
-                        Delete
-                    </button>
-                `;
 
-                // Append the new comment to the comments section
-                document.querySelector('.comments-section').append(newComment);
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    content: content,
+                }),
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                    alert(data.error); // Display error message to user
+                } else {
+                    // Create a new comment element
+                    const newComment = document.createElement('div');
+                    newComment.className = 'comment';
+                    newComment.id = `comment-${data.id}`; // Give it an ID if needed for deletion
+                    newComment.innerHTML = `
+                        <strong>${data.user}</strong>
+                        <p>${data.content}</p>
+                        <small>${data.timestamp}</small>
+                        <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="${data.id}">
+                            Delete
+                        </button>
+                    `;
 
-                // Optionally, reset the comment form
-                document.querySelector('textarea[name="content"]').value = '';
+                    // Append the new comment to the comments section
+                    document.querySelector('.comments-section').append(newComment);
 
-                // Attach delete event listener to the new comment delete button
-                attachDeleteCommentEvent(newComment.querySelector('.delete-comment-btn'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("There was an error adding the comment.");
+                    // Optionally, reset the comment form
+                    document.querySelector('textarea[name="content"]').value = '';
+
+                    // Attach delete event listener to the new comment delete button
+                    attachDeleteCommentEvent(newComment.querySelector('.delete-comment-btn'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("There was an error adding the comment.");
+            });
+            };
         });
-    };
-});
-{% endcomment %}
+        {% endcomment %}
 
 
     </script>
@@ -268,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <li class="nav-item">
                                 <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
                                     <div class="input-group">
-                                        <input class="form-control" type="search" name="q" placeholder="Search..." aria-label="Search" style="border-radius: 25px; padding: 12px; width: 350px;">
+                                        <input class="form-control" type="search" name="q" placeholder="Search for a profile..." aria-label="Search" style="border-radius: 25px; padding: 12px; width: 350px;">
                                         <div class="input-group-append" style="position: relative;">
                                             <span class="input-group-text" style="background-color: transparent; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
                                                 <i class="fas fa-search"></i>
@@ -314,10 +315,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         </nav>
-
+        
             <div class="body">
                 {% block body %}
                 {% endblock %}
+                
+                {% if user.is_authenticated %}
+                    <div class="suggested-users">
+                        <h5>Suggested Users</h5>
+                        <ul>
+                            {% for user in suggested_users %}
+                                <li><a href="{% url 'profile' user.username %}">{{ user.username }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
             
         </div>

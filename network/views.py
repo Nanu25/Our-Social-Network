@@ -21,8 +21,15 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Suggest users who are not in the following list, and exclude the logged-in user
+    if request.user.is_authenticated:
+        suggested_users = User.objects.exclude(id__in=request.user.following.all()).exclude(id=request.user.id)
+    else:
+        suggested_users = None
+
     return render(request, 'network/index.html', {
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'suggested_users': suggested_users
     })
 
 def login_view(request):
