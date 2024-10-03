@@ -1,0 +1,464 @@
+/* General styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f8fa;
+    color: #14171a;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area will expand to fill the available space */
+.main-content {
+    flex: 1;
+    padding: 20px; /* Optional padding for content */
+}
+
+/* Navbar custom styles */
+.navbar {
+    background-color: #f8f9fa !important; /* Light background for navbar */
+    padding: 15px 0; /* Increase padding for better spacing */
+    border-bottom: 1px solid #e1e8ed; /* Soft border at the bottom */
+}
+
+.navbar-brand {
+    font-size: 1.5rem; /* Larger font size for brand name */
+    font-weight: bold;
+    color: #007bff !important; /* Primary blue for branding */
+    margin-left: -10px; /* Adjust this value as needed */
+}
+
+.navbar-toggler {
+    border: none; /* Remove default border for burger icon */
+}
+
+.navbar-toggler-icon {
+    background-color: #007bff; /* Blue color for burger icon */
+}
+
+.nav-item {
+    margin-right: 15px; /* Space between nav items */
+}
+
+.nav-link {
+    font-size: 1rem; /* Increase font size */
+    color: #343a40 !important; /* Dark text for all nav links */
+}
+
+.nav-link:hover {
+    color: #007bff !important; /* Change link color on hover */
+}
+
+.nav-link.text-danger {
+    color: #dc3545 !important; /* Red for log out link */
+}
+
+.navbar .nav-link.font-weight-bold {
+    color: #007bff !important; /* Bold and blue for profile name */
+}
+
+/* Make the navbar sticky at the top */
+.navbar.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Body styling */
+.body {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Post styling */
+.post {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.post a {
+    color: #1da1f2;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.post a:hover {
+    text-decoration: underline;
+}
+
+.post p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.post small {
+    color: #657786;
+}
+
+.post hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #e1e8ed;
+}
+
+/* Custom button styling */
+.btn-primary {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+}
+
+.btn-primary:hover {
+    background-color: #0d95e8;
+    border-color: #0d95e8;
+}
+
+/* Links */
+a {
+    color: #1da1f2;
+}
+
+a:hover {
+    color: #0d95e8;
+}
+
+/* Follow/Unfollow buttons */
+.follow-btn, .unfollow-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-top: 10px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.follow-btn {
+    background-color: #1da1f2;
+    color: white;
+}
+
+.unfollow-btn {
+    background-color: #e0245e;
+    color: white;
+}
+
+.follow-btn:hover {
+    background-color: #0d95e8;
+}
+
+.unfollow-btn:hover {
+    background-color: #c2185b;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f7f9fa;
+    border-top: 1px solid #e1e8ed;
+    font-family: 'Arial', sans-serif;
+    color: #657786;
+    position: relative;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer a {
+    color: #1da1f2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer .heart {
+    color: #e0245e;
+    animation: heartbeat 1.5s infinite;
+    font-size: 1.2em;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Post container */
+.post {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+}
+
+/* Post header */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Post content */
+.post-content {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Post actions (like, edit buttons, etc.) */
+.post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.post-actions p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-like,
+.btn-edit {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    text-transform: uppercase;
+}
+
+.btn-like:hover,
+.btn-edit:hover {
+    background-color: #0d8de0;
+}
+
+.btn-outline-primary {
+    border-color: #1da1f2;
+    color: #1da1f2;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1da1f2;
+    color: white;
+}
+
+/* Increase the width of the search bar */
+.form-control {
+    width: 300px;  /* Adjust this value as needed */
+    padding: 10px; /* You can also increase the padding for a larger feel */
+}
+
+/* Container for the profile */
+.profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Username */
+.profile-username {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Stats (followers and following) */
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Follow/Unfollow buttons */
+.profile-actions {
+    margin-top: 20px;
+}
+
+.btn-follow {
+    background-color: #1da1f2;
+}
+
+.btn-unfollow {
+    background-color: #ff6347;
+}
+
+.heart-animation {
+    position: absolute;
+    color: #e0245e;
+    font-size: 2.5rem;
+    animation: float 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 100000;  /* Ensure it stays on top */
+}
+
+@keyframes float {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);  /* Move upwards */
+    }
+}
+
+.like-btn {
+    margin-right: 18rem;
+}
+
+/* For very small screens, like small phones */
+@media (max-width: 615px) {
+    .like-btn {
+        margin-right: 15rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 576px) {
+    .like-btn {
+        margin-right: 13rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 576px) {
+    .like-btn {
+        margin-right: 10rem;  /* Further adjust for smaller devices */
+    }
+}
+
+@media (max-width: 480px) {
+    .like-btn {
+        margin-right: 7rem;  /* Further adjust for smaller devices */
+    }
+}
+
+.comments-section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+textarea {
+    border-radius: 8px;
+}
+
+#comment-form button {
+    border-radius: 0 8px 8px 0;
+}
+
+
+.suggested-users {
+    position: fixed; /* Fixed on the left side */
+    top: 100px; /* Add some space from the top */
+    left: 20px; /* Fixed distance from the left side */
+    width: 200px; /* Adjust width as needed, not too wide */
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+}
+
+.suggested-users {
+    position: fixed;
+    top: 150px; /* Move it down a little more */
+    left: 20px;
+    width: 220px; /* Slightly increase the width for better readability */
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    transition: transform 0.3s ease-in-out; /* Animation for smooth appearance */
+}
+
+.suggested-users:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add more shadow on hover */
+}
+
+.suggested-users h5 {
+    font-size: 1.1rem; /* Make the heading a bit larger */
+    font-weight: bold;
+    color: #007bff; /* Use a blue shade for the heading */
+}
+
+.suggested-users ul {
+    list-style: none; /* Remove bullet points */
+    padding-left: 0;
+}
+
+.suggested-users li {
+    margin-bottom: 10px; /* Add space between suggested users */
+    animation: fadeIn 0.5s ease-in-out; /* Animation for each user */
+}
+
+.suggested-users li a {
+    text-decoration: none;
+    color: #343a40; /* Dark text color */
+    font-weight: bold;
+    transition: color 0.3s ease-in-out; /* Smooth color change */
+}
+
+.suggested-users li a:hover {
+    color: #007bff; /* Change to blue on hover */
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
