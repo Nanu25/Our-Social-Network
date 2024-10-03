@@ -462,3 +462,10 @@ textarea {
         transform: translateY(0);
     }
 }
+
+
+@media (max-width: 768px) {
+    .suggested-users {
+        display: none;
+    }
+}
