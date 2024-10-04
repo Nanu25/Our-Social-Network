@@ -108,10 +108,16 @@ def profile(request, username):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    if request.user.is_authenticated:
+        suggested_users = User.objects.exclude(id__in=request.user.following.all()).exclude(id=request.user.id)
+    else:
+        suggested_users = None
+
     return render(request, 'network/profile.html', {
         "profile_user": profile_user,
         'page_obj': page_obj,
-        "actual_user": request.user
+        "actual_user": request.user,
+        'suggested_users': suggested_users,
     })
 
 @login_required
@@ -136,9 +142,14 @@ def following(request):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    if request.user.is_authenticated:
+        suggested_users = User.objects.exclude(id__in=request.user.following.all()).exclude(id=request.user.id)
+    else:
+        suggested_users = None
 
     return render(request, 'network/following.html', {
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'suggested_users': suggested_users
     })
 
 @login_required

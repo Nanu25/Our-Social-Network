@@ -9,7 +9,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -256,13 +257,66 @@
                 <a class="navbar-brand font-weight-bold text-primary" href="{% url 'index' %}" style="margin-left: -20px;">
                     Our Social Network
                 </a>
-        
-                <!-- Toggler for mobile view -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-        
-                <!-- Search bar in the middle, aligned using mx-auto -->
+
+                   <!-- Toggler for mobile view -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-caret-down"></i> <!-- Caret down icon for dropdown -->
+        </button>
+
+            
+            
+
+        <!-- Collapsible navbar section -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <!-- Centered search bar -->
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
+                        <div class="input-group">
+                            <input class="form-control" type="search" name="q" placeholder="Search for a profile..." aria-label="Search" style="border-radius: 25px; padding: 12px; width: 350px;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="background-color: transparent; border: none;">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            {% endif %}
+
+            <!-- Right-aligned items -->
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-primary" href="{% url 'profile' user.username %}">{{ user.username }}</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'index' %}">All Posts</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'following' %}">Following</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'new_post' %}">New Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% comment %}            <!-- Search bar in the middle, aligned using mx-auto -->
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         {% if user.is_authenticated %}
@@ -281,7 +335,7 @@
                         {% endif %}
                     </ul>
                 </div>
-        
+
                 <!-- Right-aligned items -->
                 <div class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
@@ -312,10 +366,10 @@
                             </li>
                         {% endif %}
                     </ul>
-                </div>
+                </div>{% endcomment %}
             </div>
         </nav>
-        
+
             <div class="body">
                 {% block body %}
                 {% endblock %}
