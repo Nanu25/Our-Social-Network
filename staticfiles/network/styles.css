@@ -85,6 +85,7 @@ html, body {
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
+    width: 700px;
 }
 
 .post a {
@@ -220,11 +221,16 @@ a:hover {
 }
 
 /* Post content */
+/* Post content */
 .post-content {
-    font-size: 1.1em;
+    font-size: 1.5em;  /* Significantly larger font size */
+    line-height: 1.8;  /* More spacing between lines */
     margin-bottom: 20px;
-    color: #333;
+    color: #000;       /* Set to pure black for maximum contrast */
+    font-weight: bold; /* Make the content bold */
 }
+
+
 
 /* Post actions (like, edit buttons, etc.) */
 .post-actions {
@@ -321,6 +327,13 @@ a:hover {
 .btn-unfollow {
     background-color: #ff6347;
 }
+
+.new-post-textarea {
+    height: 300px; /* Increase height */
+    width: 100%;   /* Set width to fill available space */
+    resize: none;  /* Prevent manual resizing, if desired */
+}
+
 
 .heart-animation {
     position: absolute;
@@ -465,6 +478,49 @@ textarea {
     }
 }
 
+/* Responsive adjustments for mobile devices */
+@media (max-width: 768px) {
+    .login-input, .login-btn {
+        font-size: 1.5rem; /* Even larger text on small screens */
+        padding: 20px; /* More padding for touch-friendly inputs */
+    }
+}
+/* Adjust the size of input fields for desktop */
+.login-input {
+    font-size: 1.25rem; /* Large text but not overwhelming */
+    padding: 12px; /* Slightly less padding */
+    border-radius: 8px; /* Rounded corners */
+    width: 100%; /* Ensure it takes the full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Adjust the login button */
+.login-btn {
+    font-size: 1rem; /* Reduce text size */
+    padding: 8px 20px; /* Smaller padding for a more compact button */
+    border-radius: 5px; /* Smaller border-radius */
+    width: auto; /* Remove the full-width setting */
+    display: inline-block; /* Ensures it doesn't stretch across the form */
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 768px) {
+    .login-input, .login-btn {
+        font-size: 1.25rem; /* Adjusted for smaller screens */
+        padding: 15px; /* Still touch-friendly but more compact */
+    }
+
+    /* Ensure proper display on small screens */
+    .form-group {
+        width: 100%;
+    }
+
+    .post {
+        width: 100%;
+    }
+
+}
+
 /* For screens smaller than 768px (mobile phones) */
 @media (max-width: 768px) {
     /* Reduce the title size */
@@ -475,7 +531,7 @@ textarea {
 
     /* Reduce the width of the search bar */
     .form-control {
-        width: 10px; /* Make search bar smaller */
+        width: 230px; /* Make search bar smaller */
         padding: 8px; /* Adjust padding for better fit */
     }
 
