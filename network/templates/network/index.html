@@ -43,15 +43,17 @@
                     </div>
                 
                     <!-- Comment form -->
-                    <form id="comment-form" method="POST" action="{% url 'add_comment' post.id %}" class="mt-4">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <textarea class="form-control" name="content" placeholder="Add your comment..." rows="2" required></textarea>
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">Comment</button>
+                    {% if user.is_authenticated %}
+                        <form id="comment-form" method="POST" action="{% url 'add_comment' post.id %}" class="mt-4">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <textarea class="form-control" name="content" placeholder="Add your comment..." rows="2" required></textarea>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Comment</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    {% endif %}
                 </div>
 
                  
