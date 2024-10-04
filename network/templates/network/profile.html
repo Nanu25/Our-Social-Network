@@ -54,10 +54,13 @@
                         <div class="card mb-3" id="comment-{{ comment.id }}">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
-                                    <div>
-                                        <strong>{{ comment.user.username }}</strong> <br>
-                                        <small>{{ comment.timestamp|date:"b d Y, h:i A" }}</small>
-                                    </div>
+                                        <div>
+                                            <a href="{% url 'profile' comment.user.username %}" style="color: #000005;">
+                                                <strong>{{ comment.user.username }}</strong>
+                                            </a>
+                                            <br>
+                                            <small>{{ comment.timestamp|date:"b d Y, h:i A" }}</small>
+                                        </div>
                                     {% if comment.user == request.user %}
                                         <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="{{ comment.id }}">Delete</button>
                                     {% endif %}

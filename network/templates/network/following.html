@@ -33,7 +33,10 @@
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <strong>{{ comment.user.username }}</strong> <br>
+                                                <a href="{% url 'profile' comment.user.username %}" style="color: #000005;">
+                                                    <strong>{{ comment.user.username }}</strong>
+                                                </a>
+                                                <br>
                                                 <small>{{ comment.timestamp|date:"b d Y, h:i A" }}</small>
                                             </div>
                                             {% if comment.user == request.user %}

@@ -85,6 +85,7 @@ html, body {
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
+    width: 700px;
 }
 
 .post a {
@@ -220,11 +221,16 @@ a:hover {
 }
 
 /* Post content */
+/* Post content */
 .post-content {
-    font-size: 1.1em;
+    font-size: 1.5em;  /* Significantly larger font size */
+    line-height: 1.8;  /* More spacing between lines */
     margin-bottom: 20px;
-    color: #333;
+    color: #000;       /* Set to pure black for maximum contrast */
+    font-weight: bold; /* Make the content bold */
 }
+
+
 
 /* Post actions (like, edit buttons, etc.) */
 .post-actions {
